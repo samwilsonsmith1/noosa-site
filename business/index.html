@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add or update your business · Noosa App</title>
+<meta name="description" content="Add your Noosa business to the Noosa App, or tell us what to correct in your listing.">
+<style>
+  :root {
+    --bg: #F3F5F5; --surface: #FFFFFF; --ink: #1F2D35; --muted: #5D6A71; --link: #3F6E82;
+    --line: #DCE2E3; --field: #F7F9F9; --error: #A3402E; --ok: #3F6E82;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: 48px 16px 64px; }
+  h1 { font-weight: 500; letter-spacing: -0.02em; margin: 0 0 8px; font-size: 30px; line-height: 1.2; }
+  h2 { font-weight: 500; letter-spacing: -0.01em; font-size: 19px; margin: 0 0 4px; }
+  a { color: var(--link); }
+  .lead { color: var(--muted); margin: 0 0 28px; }
+  .card { background: var(--surface); border-radius: 20px; padding: 22px 20px; margin-bottom: 12px; }
+  .hint { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+  label { display: block; font-weight: 600; font-size: 15px; margin: 16px 0 6px; }
+  label .opt { font-weight: 400; color: var(--muted); }
+  input[type=text], input[type=email], input[type=tel], input[type=url], select, textarea {
+    width: 100%; font: inherit; color: var(--ink); background: var(--field);
+    border: 1px solid var(--line); border-radius: 12px; padding: 11px 13px; min-height: 46px;
+  }
+  textarea { min-height: 130px; resize: vertical; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--link); outline-offset: 1px; }
+  .choice { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+  .choice label { margin: 0; font-weight: 500; border: 1px solid var(--line); border-radius: 999px; padding: 10px 16px; cursor: pointer; min-height: 44px; display: flex; align-items: center; }
+  .choice input { position: absolute; opacity: 0; pointer-events: none; }
+  .choice input:checked + span { color: #fff; }
+  .choice label:has(input:checked) { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .choice label:has(input:focus-visible) { outline: 2px solid var(--link); outline-offset: 2px; }
+  .tick { display: flex; gap: 12px; align-items: flex-start; font-weight: 400; margin-top: 16px; }
+  .tick input { width: 22px; height: 22px; margin-top: 2px; flex: none; accent-color: var(--ink); }
+  .photos { font-size: 14px; color: var(--muted); margin-top: 8px; }
+  .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  button { font: inherit; font-weight: 600; color: #fff; background: var(--ink); border: 0; border-radius: 999px; padding: 14px 26px; min-height: 50px; width: 100%; cursor: pointer; margin-top: 8px; }
+  button:disabled { opacity: 0.55; cursor: default; }
+  .message { margin: 14px 0 0; font-size: 15px; }
+  .message.error { color: var(--error); }
+  .done { text-align: center; padding: 36px 20px; }
+  .small { font-size: 13px; color: var(--muted); margin-top: 18px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Add or update your business</h1>
+  <p class="lead">Tell us about a Noosa business that should be in the Noosa App, or what to fix in a listing. We check everything ourselves before it goes into the app.</p>
+
+  <form id="form" novalidate>
+    <div class="card">
+      <h2>The business</h2>
+      <div class="choice" role="radiogroup" aria-label="What would you like to do">
+        <label><input type="radio" name="kind" value="new" checked><span>Add a business</span></label>
+        <label><input type="radio" name="kind" value="edit"><span>Correct a listing</span></label>
+      </div>
+      <input type="hidden" name="place_id" id="place_id">
+
+      <label for="business_name">Business name</label>
+      <input type="text" id="business_name" name="business_name" required maxlength="120" autocomplete="organization">
+
+      <label for="website">Website <span class="opt">(optional)</span></label>
+      <input type="url" id="website" name="website" maxlength="300" inputmode="url" placeholder="yourbusiness.com.au" autocomplete="url">
+
+      <label for="details" id="details_label">About the business</label>
+      <p class="hint" id="details_hint">What it is, where it is, opening hours, and anything a visitor should know.</p>
+      <textarea id="details" name="details" required maxlength="4000"></textarea>
+    </div>
+
+    <div class="card">
+      <h2>Photos <span class="opt" style="font-weight:400;color:var(--muted);font-size:15px">(optional)</span></h2>
+      <p class="hint">Up to 6 of your own photos. Landscape or portrait, the bigger the better. We remove location data from them.</p>
+      <input type="file" id="photos" name="photos" accept="image/jpeg,image/png,image/heic,image/heif,image/webp" multiple>
+      <p class="photos" id="photo_count" aria-live="polite"></p>
+      <label class="tick" for="photos_permission">
+        <input type="checkbox" id="photos_permission" name="photos_permission">
+        <span>I own these photos, or I'm authorised to give them to Noosa App to use in the app and its listings.</span>
+      </label>
+    </div>
+
+    <div class="card">
+      <h2>Your details</h2>
+      <p class="hint">So we can check with you before anything changes. We don't publish them.</p>
+      <label for="contact_name">Your name</label>
+      <input type="text" id="contact_name" name="contact_name" required maxlength="120" autocomplete="name">
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required maxlength="200" autocomplete="email">
+
+      <label for="phone">Phone <span class="opt">(optional)</span></label>
+      <input type="tel" id="phone" name="phone" maxlength="40" autocomplete="tel">
+
+      <label for="relationship">Your connection to the business</label>
+      <select id="relationship" name="relationship" required>
+        <option value="">Choose one</option>
+        <option>Owner</option>
+        <option>Manager</option>
+        <option>Staff</option>
+        <option>Marketing or agency</option>
+        <option>Other</option>
+      </select>
+
+      <div class="trap" aria-hidden="true">
+        <label for="company_fax">Leave this empty</label>
+        <input type="text" id="company_fax" name="company_fax" tabindex="-1" autocomplete="off">
+      </div>
+
+      <button type="submit" id="submit">Send</button>
+      <p class="message" id="message" role="status" aria-live="polite"></p>
+      <p class="small">We use your details only to check this and reply. See our <a href="../privacy/">privacy policy</a>.</p>
+    </div>
+  </form>
+
+  <div class="card done" id="done" hidden>
+    <h2>Thanks, it's on its way</h2>
+    <p class="lead" style="margin:8px 0 0">We'll check it and be in touch if we need anything. Nothing changes in the app until we have.</p>
+  </div>
+</main>
+
+<script>
+  const ENDPOINT = 'https://umktkwggbjhwotnvafjo.supabase.co/functions/v1/submit-business';
+  const MAX_PHOTOS = 6;
+  const MAX_SIDE = 2560; // big enough for a full-screen photo; also keeps the upload small
+  const form = document.getElementById('form');
+  const message = document.getElementById('message');
+  const submit = document.getElementById('submit');
+  const photosInput = document.getElementById('photos');
+  const photoCount = document.getElementById('photo_count');
+
+  // Opened from a place in the app: ?place=season&name=Season
+  const params = new URLSearchParams(location.search);
+  if (params.get('place')) {
+    form.kind.value = 'edit';
+    form.place_id.value = params.get('place');
+    form.business_name.value = params.get('name') || '';
+  }
+
+  function updateKind() {
+    const edit = form.kind.value === 'edit';
+    document.getElementById('details_label').textContent = edit ? 'What should we change?' : 'About the business';
+    document.getElementById('details_hint').textContent = edit
+      ? 'Tell us what’s wrong or out of date, and what it should say.'
+      : 'What it is, where it is, opening hours, and anything a visitor should know.';
+  }
+  form.querySelectorAll('input[name=kind]').forEach((r) => r.addEventListener('change', updateKind));
+  updateKind();
+
+  photosInput.addEventListener('change', () => {
+    const n = photosInput.files.length;
+    photoCount.textContent = n === 0 ? '' : n > MAX_PHOTOS ? `That's ${n}. Please choose up to ${MAX_PHOTOS}.` : `${n} photo${n === 1 ? '' : 's'} chosen`;
+  });
+
+  // Redraws a photo as a JPEG no bigger than MAX_SIDE, which also drops its location data.
+  // If the browser can't read it (some HEIC files), it goes as it is.
+  async function prepare(file) {
+    try {
+      const url = URL.createObjectURL(file);
+      const img = await new Promise((resolve, reject) => {
+        const i = new Image();
+        i.onload = () => resolve(i);
+        i.onerror = reject;
+        i.src = url;
+      });
+      const scale = Math.min(1, MAX_SIDE / Math.max(img.naturalWidth, img.naturalHeight));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.naturalWidth * scale);
+      canvas.height = Math.round(img.naturalHeight * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+      if (!blob) return file;
+      return new File([blob], file.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' });
+    } catch {
+      return file;
+    }
+  }
+
+  function fail(text, field) {
+    message.textContent = text;
+    message.className = 'message error';
+    if (field) field.focus();
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    message.textContent = '';
+    const required = [form.business_name, form.details, form.contact_name, form.email, form.relationship];
+    const empty = required.find((f) => !f.value.trim());
+    if (empty) return fail('Please fill in the highlighted field.', empty);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.value.trim())) return fail('That email doesn’t look right.', form.email);
+    const files = Array.from(photosInput.files);
+    if (files.length > MAX_PHOTOS) return fail(`Please choose up to ${MAX_PHOTOS} photos.`, photosInput);
+    if (files.length && !form.photos_permission.checked) return fail('Please tick the box to confirm you own the photos or may share them.', form.photos_permission);
+
+    submit.disabled = true;
+    submit.textContent = files.length ? 'Sending photos…' : 'Sending…';
+    try {
+      const data = new FormData(form);
+      data.delete('photos');
+      for (const file of files) data.append('photos', await prepare(file));
+      const res = await fetch(ENDPOINT, { method: 'POST', body: data });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || 'Something went wrong. Please try again.');
+      form.hidden = true;
+      document.getElementById('done').hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      fail(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      submit.disabled = false;
+      submit.textContent = 'Send';
+    }
+  });
+</script>
+</body>
+</html>
