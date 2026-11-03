@@ -3,22 +3,324 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Noosa App</title>
+<title>Noosa App: the best of Noosa, right now</title>
+<meta name="description" content="A local guide to Noosa, Queensland: what's on today and coming up, the places locals love, and a plan for each day of your trip. Free for iPhone, coming soon.">
+<link rel="canonical" href="https://noosaapp.com.au/">
+<meta property="og:title" content="Noosa App: the best of Noosa, right now">
+<meta property="og:description" content="What's on today, what's coming up, and the places locals love, in one calm app.">
+<meta property="og:image" content="https://noosaapp.com.au/img/main-beach.jpg">
+<meta property="og:url" content="https://noosaapp.com.au/">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&display=swap">
 <style>
-  :root { --bg: #F3F5F5; --ink: #1F2D35; --muted: #5D6A71; --link: #3F6E82; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-  main { max-width: 640px; margin: 0 auto; padding: 48px 24px; }
-  h1 { font-weight: 500; letter-spacing: -0.02em; margin: 0 0 8px; }
+  :root {
+    --bg: #F3F5F5; --surface: #FFFFFF; --ink: #1F2D35; --body: #3B4950; --muted: #5D6A71;
+    --link: #3F6E82; --line: #CFD8DB; --rule: #D5DDE0; --gold: #F1CF6E; --error: #A3402E;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 Manrope, system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
   a { color: var(--link); }
+  a:hover { color: #2F5566; }
+  img { display: block; max-width: 100%; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  header.wrap { padding-top: 20px; padding-bottom: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+  .brand img { width: 36px; height: 36px; border-radius: 9px; }
+  .brand span { font-size: 24px; font-weight: 600; letter-spacing: -0.03em; }
+  nav.main { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+  nav.main a { padding: 12px 14px; font-size: 15px; font-weight: 500; color: var(--body); text-decoration: none; }
+  nav.main a.pill { padding: 12px 20px; font-weight: 600; color: #fff; background: var(--ink); border-radius: 999px; }
+
+  .hero { position: relative; height: 640px; border-radius: 32px; overflow: hidden; display: flex; align-items: flex-end; background: #6E8F9B url(img/main-beach.jpg) center 60% / cover; }
+  .hero::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 420px; background: linear-gradient(to top, rgba(20,32,38,0.72), rgba(20,32,38,0)); }
+  .hero-text { position: relative; padding: 48px; max-width: 760px; display: flex; flex-direction: column; gap: 20px; color: #fff; }
+  .badge { align-self: flex-start; display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,0.18); font-size: 14px; font-weight: 600; }
+  .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--gold); flex: none; }
+  h1 { margin: 0; font-size: 56px; line-height: 1.05; font-weight: 300; letter-spacing: -0.04em; }
+  .hero p { margin: 0; font-size: 20px; line-height: 1.5; }
+  .hero .credit { position: absolute; right: 20px; bottom: 16px; margin: 0; font-size: 12px; color: rgba(255,255,255,0.85); }
+
+  #get { padding-top: 32px; scroll-margin-top: 24px; }
+  .notify { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; }
+  .notify input[type=email] { width: 280px; max-width: 100%; min-height: 52px; padding: 0 22px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font: inherit; font-size: 16px; color: var(--ink); }
+  .notify input[type=email]:focus { outline: 2px solid var(--link); outline-offset: 1px; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 24px; border-radius: 999px; border: none; background: var(--ink); color: #fff; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; }
+  .btn:disabled { opacity: 0.6; cursor: default; }
+  .btn-outline { min-height: 48px; padding: 0 22px; border: 1px solid var(--line); background: transparent; color: var(--ink); font-size: 15px; }
+  .notify-note { margin: 12px 0 0; font-size: 15px; color: var(--muted); }
+  .notify-note.error { color: var(--error); }
+  .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  section.block { padding-top: 96px; }
+  h2 { margin: 0; font-size: 36px; font-weight: 500; letter-spacing: -0.025em; line-height: 1.2; }
+  h2.small { font-size: 22px; letter-spacing: -0.02em; }
+  .lead { margin: 12px 0 0; max-width: 620px; font-size: 17px; color: var(--body); }
+  .lead.quiet { margin-top: 8px; font-size: 15px; color: var(--muted); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+
+  .now-head { display: flex; align-items: center; gap: 10px; }
+  .now-head .dot { width: 10px; height: 10px; }
+  .card { background: var(--surface); border-radius: 20px; overflow: hidden; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; }
+  .card img { width: 100%; height: 200px; object-fit: cover; }
+  .card div { padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 6px; }
+  .eyebrow { font-size: 13px; font-weight: 600; color: var(--link); }
+  .card-title { font-size: 17px; font-weight: 600; line-height: 1.35; }
+  .meta { font-size: 13px; color: var(--muted); }
+
+  .feature { background: var(--surface); border-radius: 20px; padding: 28px 28px 0; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+  h3 { margin: 0; font-size: 18px; font-weight: 600; }
+  .feature p { margin: 0; font-size: 15px; color: var(--body); }
+  .shot { margin-top: auto; padding-top: 16px; width: 78%; align-self: center; }
+  .shot img { width: 100%; border: 1px solid #E1E6E8; border-bottom: none; border-radius: 28px 28px 0 0; }
+
+  .day { text-decoration: none; color: var(--ink); display: flex; flex-direction: column; gap: 4px; }
+  .day img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 20px; margin-bottom: 8px; }
+  .day .card-title { font-size: 18px; }
+
+  .promise { background: var(--surface); border-radius: 20px; padding: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 32px; }
+  .promise h2 { font-size: 28px; letter-spacing: -0.02em; line-height: 1.25; }
+  .promise div { display: flex; flex-direction: column; gap: 8px; }
+  .promise h3 { font-size: 16px; }
+  .promise p { margin: 0; font-size: 15px; color: var(--body); }
+
+  .biz { display: flex; flex-wrap: wrap; background: var(--surface); border-radius: 20px; overflow: hidden; }
+  .biz-photo { flex: 1 1 360px; min-height: 320px; background: #8FB2BD url(img/sunshine-beach.jpg) center / cover; }
+  .biz-text { flex: 1 1 420px; padding: 48px; display: flex; flex-direction: column; gap: 16px; justify-content: center; }
+  .biz-text h2 { font-size: 28px; letter-spacing: -0.02em; }
+  .biz-text p { margin: 0; font-size: 16px; color: var(--body); }
+  .biz-text p.meta { font-size: 12px; color: var(--muted); }
+  .biz-text .btn-outline { align-self: flex-start; }
+
+  footer.wrap { padding-top: 96px; padding-bottom: 48px; }
+  .foot { border-top: 1px solid var(--rule); padding-top: 32px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 32px; }
+  .foot > div { display: flex; flex-direction: column; gap: 10px; max-width: 460px; }
+  .foot .name { font-size: 20px; font-weight: 600; letter-spacing: -0.03em; }
+  .foot p { margin: 0; font-size: 13px; color: var(--muted); }
+  .foot nav { display: flex; flex-wrap: wrap; gap: 0 24px; align-content: flex-start; }
+  .foot nav a { font-size: 14px; padding: 10px 0; }
+
+  @media (max-width: 700px) {
+    .wrap { padding: 0 16px; }
+    nav.main a:not(.pill) { display: none; }
+    .hero { height: 560px; border-radius: 24px; }
+    .hero-text { padding: 24px 24px 48px; gap: 14px; }
+    h1 { font-size: 40px; }
+    .hero p { font-size: 17px; }
+    .hero .credit { left: 24px; right: auto; }
+    section.block { padding-top: 64px; }
+    h2 { font-size: 28px; }
+    .promise, .biz-text { padding: 28px; }
+    .notify input[type=email], .notify .btn { width: 100%; justify-content: center; }
+  }
 </style>
 </head>
 <body>
+
+<header class="wrap">
+  <a class="brand" href="./">
+    <img src="img/icon.png" alt="">
+    <span>noosa</span>
+  </a>
+  <nav class="main" aria-label="Main">
+    <a href="#features">What it does</a>
+    <a href="#days">Ideas for a day</a>
+    <a href="business/">For businesses</a>
+    <a class="pill" href="#get">Get notified</a>
+  </nav>
+</header>
+
 <main>
-<h1>Noosa App</h1>
-<p>A local guide to Noosa, Queensland: today's conditions, places to go, ideas for a day and a plan for each day of your trip.</p>
-<p><a href="privacy/">Privacy policy</a> · <a href="terms/">Terms of use</a></p>
-<p>Run a business in Noosa? <a href="business/">Add or update your business</a>.</p>
-<p>Questions, or something we've got wrong: <a href="mailto:noosaapp@icloud.com">noosaapp@icloud.com</a></p>
+  <section class="wrap" aria-label="Intro">
+    <div class="hero">
+      <div class="hero-text">
+        <span class="badge"><span class="dot"></span>Free for iPhone</span>
+        <h1>The best of Noosa, right now.</h1>
+        <p>What's on today, what's coming up, and the places locals love, picked for this moment and in one calm app.</p>
+      </div>
+      <p class="credit">Main Beach · Photo: Queensland, Australia on Unsplash</p>
+    </div>
+  </section>
+
+  <section id="get" class="wrap" aria-labelledby="get-title">
+    <h2 id="get-title" class="sr">Find out when it's out</h2>
+    <form class="notify" id="notify" novalidate>
+      <label for="notify-email" class="sr">Email</label>
+      <input id="notify-email" name="email" type="email" placeholder="Your email" autocomplete="email" required maxlength="200">
+      <div class="trap" aria-hidden="true">
+        <label for="company_fax">Leave this empty</label>
+        <input type="text" id="company_fax" name="company_fax" tabindex="-1" autocomplete="off">
+      </div>
+      <button class="btn" type="submit" id="notify-button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+        Tell me when it's out
+      </button>
+    </form>
+    <p class="notify-note" id="notify-note" role="status" aria-live="polite">Coming to the App Store soon. One email when it's out, no spam.</p>
+  </section>
+
+  <section class="wrap block" aria-labelledby="now-title">
+    <div class="now-head">
+      <span class="dot"></span>
+      <h2 id="now-title" class="small">Right now in Noosa</h2>
+    </div>
+    <p class="lead quiet">A taste of what the app shows. It changes through the day.</p>
+    <div class="grid" style="margin-top:24px">
+      <a class="card" href="#get">
+        <img src="img/river-sandbank.jpg" alt="Sandbanks on the Noosa River" loading="lazy">
+        <div>
+          <span class="eyebrow">This arvo</span>
+          <span class="card-title">Wade the sandbanks off the Spit as the tide drops</span>
+          <span class="meta">Photo: Timothée Duran on Unsplash</span>
+        </div>
+      </a>
+      <a class="card" href="#get">
+        <img src="img/headland-dusk.jpg" alt="Main Beach and the headland at dusk" loading="lazy">
+        <div>
+          <span class="eyebrow">At sunset</span>
+          <span class="card-title">Watch the light go over Main Beach</span>
+          <span class="meta">Photo: Lukas Spirig on Unsplash</span>
+        </div>
+      </a>
+      <a class="card" href="#get">
+        <img src="img/main-beach-dawn.jpg" alt="Main Beach at dawn" loading="lazy">
+        <div>
+          <span class="eyebrow">Coming up · 20–21 Feb</span>
+          <span class="card-title">Noosa Summer Swim off Main Beach</span>
+          <span class="meta">Photo: Bailey Rytenskild on Unsplash</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section id="features" class="wrap block" aria-labelledby="features-title">
+    <h2 id="features-title">What it does</h2>
+    <p class="lead">Everything a visitor asks a local, in one calm app: what's good right now, what's on, where to go, and a plan for your days here.</p>
+    <div class="grid" style="margin-top:40px">
+      <article class="feature">
+        <h3>Ideas for right now</h3>
+        <p>Tap through a few ideas that suit this moment, from the ferry up the river to dinner on the water.</p>
+        <div class="shot"><img src="img/app-today.jpg" alt="The Today screen of the app, suggesting the ferry up the river to Tewantin" loading="lazy"></div>
+      </article>
+      <article class="feature">
+        <h3>What's on, today and this week</h3>
+        <p>Live music, markets, trivia and Noosa's big festivals, checked with the venues every week.</p>
+        <div class="shot"><img src="img/app-events.jpg" alt="The Big events screen of the app, with the Summer Swim and the Festival of Surfing" loading="lazy"></div>
+      </article>
+      <article class="feature">
+        <h3>Places worth your time</h3>
+        <p>Beaches, national park walks, cafes, restaurants, tours and hinterland days, each with the best time to go.</p>
+        <div class="shot"><img src="img/app-place.jpg" alt="Tea Tree Bay's page in the app" loading="lazy"></div>
+      </article>
+      <article class="feature">
+        <h3>Find it on the map</h3>
+        <p>Every place on one quiet map, with walking tracks drawn on, and a plan for each day of your trip.</p>
+        <div class="shot"><img src="img/app-map.jpg" alt="The map screen of the app, with places across Noosa" loading="lazy"></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="days" class="wrap block" aria-labelledby="days-title">
+    <h2 id="days-title">Borrow a local's day</h2>
+    <p class="lead">Ready-made days you can add to your plan in one tap, then change to suit.</p>
+    <div class="grid" style="margin-top:32px">
+      <a class="day" href="#get">
+        <img src="img/boardwalk.jpg" alt="The boardwalk along Main Beach" loading="lazy">
+        <span class="card-title">The perfect beach day</span>
+        <span class="meta">5 stops · Sunrise till sunset · Photo: Queensland, Australia</span>
+      </a>
+      <a class="day" href="#get">
+        <img src="img/noosa-spit-sunset.jpg" alt="The sun setting over the Noosa River from the Spit" loading="lazy">
+        <span class="card-title">River and sunset</span>
+        <span class="meta">5 stops · 2:30pm till dinner · Noosa Spit</span>
+      </a>
+      <a class="day" href="#get">
+        <img src="img/headland-dusk.jpg" alt="Main Beach and the headland at dusk" loading="lazy">
+        <span class="card-title">A classic night out</span>
+        <span class="meta">5 stops · Sunset till late · Photo: Lukas Spirig</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="wrap block" aria-labelledby="promise-title">
+    <div class="promise">
+      <h2 id="promise-title">Calm, private and made here.</h2>
+      <div>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3F6E82" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+        <h3>No accounts, no ads</h3>
+        <p>Nothing that knows who you are. Your plan and reminders stay on your phone.</p>
+      </div>
+      <div>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3F6E82" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20h20"></path><path d="M5 20V9l7-5 7 5v11"></path><path d="M10 20v-6h4v6"></path></svg>
+        <h3>Picked by locals</h3>
+        <p>Places are in because they're good, written up from their own sites and checked on the ground.</p>
+      </div>
+      <div>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3F6E82" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.9 19.1a10 10 0 0 1 0-14.2"></path><path d="M19.1 4.9a10 10 0 0 1 0 14.2"></path><path d="M8.5 15.5a5 5 0 0 1 0-7"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M3 3l18 18"></path></svg>
+        <h3>Works with no signal</h3>
+        <p>What you've loaded keeps working at the beach or out in the hinterland.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap block" aria-labelledby="biz-title">
+    <div class="biz">
+      <div class="biz-photo" role="img" aria-label="Sunshine Beach from above"></div>
+      <div class="biz-text">
+        <h2 id="biz-title">Run a business in Noosa?</h2>
+        <p>Send us your details, your own photos or a correction, and we'll check it before it goes in. Listings are free.</p>
+        <a class="btn btn-outline" href="business/">For businesses</a>
+        <p class="meta">Sunshine Beach · Photo: MC Kontext on Unsplash</p>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer class="wrap">
+  <div class="foot">
+    <div>
+      <span class="name">noosa</span>
+      <p>Noosa App is a business name of J Haidenthaler &amp; S.J Wilson-Smith. ABN 42 957 931 637.</p>
+      <p>Photos by Queensland, Australia, Lukas Spirig, Timothée Duran, Bailey Rytenskild and MC Kontext on Unsplash. Photos in the app screenshots courtesy of Tourism and Events Queensland, and Globalsurfwiki on Wikimedia Commons (CC BY-SA 4.0). Map © Google.</p>
+    </div>
+    <nav aria-label="Footer">
+      <a href="privacy/">Privacy policy</a>
+      <a href="terms/">Terms of use</a>
+      <a href="business/">For businesses</a>
+      <a href="mailto:noosaapp@icloud.com">noosaapp@icloud.com</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  const ENDPOINT = 'https://umktkwggbjhwotnvafjo.supabase.co/functions/v1/join-list';
+  const form = document.getElementById('notify');
+  const note = document.getElementById('notify-note');
+  const button = document.getElementById('notify-button');
+  const say = (text, error) => { note.textContent = text; note.className = 'notify-note' + (error ? ' error' : ''); };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = form.email.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say('That email doesn’t look right.', true); form.email.focus(); return; }
+    button.disabled = true;
+    try {
+      const res = await fetch(ENDPOINT, { method: 'POST', body: new FormData(form) });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || 'Something went wrong. Please try again.');
+      form.hidden = true;
+      say('Thanks. We’ll email you once, when it’s on the App Store.');
+    } catch (err) {
+      say(err.message || 'Something went wrong. Please try again.', true);
+    } finally {
+      button.disabled = false;
+    }
+  });
+</script>
 </body>
 </html>

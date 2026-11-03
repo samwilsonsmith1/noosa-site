@@ -5,14 +5,67 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Add or update your business · Noosa App</title>
 <meta name="description" content="Add your Noosa business to the Noosa App, or tell us what to correct in your listing.">
+<link rel="canonical" href="https://noosaapp.com.au/business/">
+<link rel="icon" href="../favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&display=swap">
 <style>
   :root {
     --bg: #F3F5F5; --surface: #FFFFFF; --ink: #1F2D35; --muted: #5D6A71; --link: #3F6E82;
     --line: #DCE2E3; --field: #F7F9F9; --error: #A3402E; --ok: #3F6E82;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-  main { max-width: 640px; margin: 0 auto; padding: 48px 16px 64px; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 Manrope, system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 640px; margin: 0 auto; padding: 88px 16px 64px; scroll-margin-top: 0; }
+
+  /* The intro above the form, as on the home page */
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  header.wrap { padding-top: 20px; padding-bottom: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+  .brand img { width: 36px; height: 36px; border-radius: 9px; }
+  .brand span { font-size: 24px; font-weight: 600; letter-spacing: -0.03em; }
+  nav.main { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+  nav.main a { padding: 12px 14px; font-size: 15px; font-weight: 500; color: #3B4950; text-decoration: none; }
+  nav.main a.pill { padding: 12px 20px; font-weight: 600; color: #fff; background: var(--ink); border-radius: 999px; }
+  .hero { position: relative; height: 440px; border-radius: 32px; overflow: hidden; display: flex; align-items: flex-end; background: #6E8F9B url(../img/main-beach-dawn.jpg) center 55% / cover; }
+  .hero::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 320px; background: linear-gradient(to top, rgba(20,32,38,0.72), rgba(20,32,38,0)); }
+  .hero-text { position: relative; padding: 48px; max-width: 720px; display: flex; flex-direction: column; gap: 16px; color: #fff; }
+  .hero h1 { margin: 0; font-size: 48px; line-height: 1.08; font-weight: 300; letter-spacing: -0.035em; }
+  .hero p { margin: 0; font-size: 18px; line-height: 1.5; }
+  .hero .credit { position: absolute; right: 20px; bottom: 16px; margin: 0; font-size: 12px; color: rgba(255,255,255,0.85); }
+  .block { padding-top: 88px; }
+  .block h2.big { font-size: 36px; letter-spacing: -0.025em; margin: 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 32px; }
+  .step, .panel { background: var(--surface); border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 10px; }
+  .step .num { width: 36px; height: 36px; border-radius: 999px; background: #E6EFF2; color: var(--link); display: flex; align-items: center; justify-content: center; font-weight: 600; }
+  .step h3, .panel h2 { margin: 0; font-size: 18px; font-weight: 600; }
+  .panel h2 { font-size: 24px; font-weight: 500; letter-spacing: -0.02em; }
+  .step p, .panel p, .panel li { margin: 0; font-size: 15px; color: #3B4950; }
+  .panel ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .panels { display: flex; flex-wrap: wrap; gap: 16px; }
+  .panels .panel { flex: 1 1 420px; padding: 36px; }
+  a.outline { align-self: flex-start; display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border-radius: 999px; border: 1px solid #CFD8DB; color: var(--ink); font-size: 15px; font-weight: 600; text-decoration: none; }
+  footer.wrap { padding-top: 32px; padding-bottom: 48px; }
+  .foot { border-top: 1px solid #D5DDE0; padding-top: 32px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 32px; }
+  .foot p { margin: 0; font-size: 13px; color: var(--muted); max-width: 460px; }
+  .foot .name { font-size: 20px; font-weight: 600; letter-spacing: -0.03em; display: block; margin-bottom: 10px; }
+  .foot nav { display: flex; flex-wrap: wrap; gap: 0 24px; align-content: flex-start; }
+  .foot nav a { font-size: 14px; padding: 10px 0; }
+  @media (max-width: 700px) {
+    .wrap { padding: 0 16px; }
+    nav.main a:not(.pill) { display: none; }
+    .hero { height: 400px; border-radius: 24px; }
+    .hero-text { padding: 24px 24px 48px; }
+    .hero h1 { font-size: 34px; }
+    .hero p { font-size: 16px; }
+    .hero .credit { left: 24px; right: auto; }
+    .block { padding-top: 64px; }
+    .block h2.big { font-size: 28px; }
+    .panels .panel { padding: 28px; }
+    main { padding-top: 64px; }
+  }
   h1 { font-weight: 500; letter-spacing: -0.02em; margin: 0 0 8px; font-size: 30px; line-height: 1.2; }
   h2 { font-weight: 500; letter-spacing: -0.01em; font-size: 19px; margin: 0 0 4px; }
   a { color: var(--link); }
@@ -47,8 +100,66 @@
 </style>
 </head>
 <body>
-<main>
-  <h1>Add or update your business</h1>
+<header class="wrap">
+  <a class="brand" href="../">
+    <img src="../img/icon.png" alt="">
+    <span>noosa</span>
+  </a>
+  <nav class="main" aria-label="Main">
+    <a href="../">The app</a>
+    <a class="pill" href="#form-title">Add your business</a>
+  </nav>
+</header>
+
+<section class="wrap" aria-label="Intro">
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Be in the app visitors use to plan their days.</h1>
+      <p>Listings are free and we choose places on merit. Help us get yours right.</p>
+    </div>
+    <p class="credit">Main Beach at dawn · Photo: Bailey Rytenskild on Unsplash</p>
+  </div>
+</section>
+
+<section class="wrap block" aria-labelledby="how-title">
+  <h2 id="how-title" class="big">How it works</h2>
+  <div class="grid">
+    <div class="step">
+      <span class="num">1</span>
+      <h3>Send us your details</h3>
+      <p>A new listing or a fix to an old one: your hours, what you do, your website.</p>
+    </div>
+    <div class="step">
+      <span class="num">2</span>
+      <h3>We check it</h3>
+      <p>We check it against your own site and write it up in the app's voice. A local approves every one before it goes in.</p>
+    </div>
+    <div class="step">
+      <span class="num">3</span>
+      <h3>You're in</h3>
+      <p>Visitors find you on the map, in Explore, in ideas for a day, and can add you to their plan.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap block panels" aria-label="House rules and cards">
+  <div class="panel">
+    <h2>A few house rules</h2>
+    <ul>
+      <li>Photos you send must be your own, or ones you're allowed to share.</li>
+      <li>Food deals and events are welcome. We never list happy hours, drink deals or drink prices (Queensland liquor law).</li>
+      <li>We write what's true from your own site, and keep it current. Tell us when something changes.</li>
+    </ul>
+  </div>
+  <div class="panel">
+    <h2>Cards for your front desk</h2>
+    <p>Hotels, cafes and shops can hand guests a small card with a QR code to the app. Free, and we'll drop them in.</p>
+    <a class="outline" href="mailto:noosaapp@icloud.com?subject=Cards%20for%20our%20front%20desk">Ask for cards</a>
+  </div>
+</section>
+
+<main id="form-area">
+  <h1 id="form-title">Add or update your business</h1>
   <p class="lead">Tell us about a Noosa business that should be in the Noosa App, or what to fix in a listing. We check everything ourselves before it goes into the app.</p>
 
   <form id="form" novalidate>
@@ -121,6 +232,21 @@
   </div>
 </main>
 
+<footer class="wrap">
+  <div class="foot">
+    <div>
+      <span class="name">noosa</span>
+      <p>Noosa App is a business name of J Haidenthaler &amp; S.J Wilson-Smith. ABN 42 957 931 637.</p>
+    </div>
+    <nav aria-label="Footer">
+      <a href="../privacy/">Privacy policy</a>
+      <a href="../terms/">Terms of use</a>
+      <a href="../">The app</a>
+      <a href="mailto:noosaapp@icloud.com">noosaapp@icloud.com</a>
+    </nav>
+  </div>
+</footer>
+
 <script>
   const ENDPOINT = 'https://umktkwggbjhwotnvafjo.supabase.co/functions/v1/submit-business';
   const MAX_PHOTOS = 6;
@@ -137,6 +263,8 @@
     form.kind.value = 'edit';
     form.place_id.value = params.get('place');
     form.business_name.value = params.get('name') || '';
+    // From a place in the app, go straight to the form, past the intro.
+    document.getElementById('form-area').scrollIntoView();
   }
 
   function updateKind() {
@@ -207,7 +335,7 @@
       if (!res.ok) throw new Error(body.error || 'Something went wrong. Please try again.');
       form.hidden = true;
       document.getElementById('done').hidden = false;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.getElementById('form-area').scrollIntoView({ behavior: 'smooth' });
     } catch (err) {
       fail(err.message || 'Something went wrong. Please try again.');
     } finally {
