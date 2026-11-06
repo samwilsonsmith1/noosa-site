@@ -37,8 +37,13 @@
   nav.main a { padding: 12px 14px; font-size: 15px; font-weight: 500; color: var(--body); text-decoration: none; }
   nav.main a.pill { padding: 12px 20px; font-weight: 600; color: #fff; background: var(--ink); border-radius: 999px; }
 
-  .hero { position: relative; height: 640px; border-radius: 32px; overflow: hidden; display: flex; align-items: flex-end; background: #6E8F9B url(img/main-beach.jpg) center 60% / cover; }
-  .hero::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 420px; background: linear-gradient(to top, rgba(20,32,38,0.72), rgba(20,32,38,0)); }
+  .hero { position: relative; height: 640px; border-radius: 32px; overflow: hidden; display: flex; align-items: flex-end; background: #6E8F9B url(video/hero-wide.jpg) center / cover; }
+  .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 420px; z-index: 1; background: linear-gradient(to top, rgba(20,32,38,0.72), rgba(20,32,38,0)); }
+  .hero-text, .hero .credit { z-index: 2; }
+  .hero-pause { position: absolute; z-index: 2; top: 16px; right: 16px; width: 44px; height: 44px; border: 0; border-radius: 999px; display: grid; place-items: center; cursor: pointer;
+    background: rgba(20,32,38,0.32); color: #fff; }
+  .hero-pause:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
   .hero-text { position: relative; padding: 48px; max-width: 760px; display: flex; flex-direction: column; gap: 20px; color: #fff; }
   .badge { align-self: flex-start; display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,0.18); font-size: 14px; font-weight: 600; }
   .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--gold); flex: none; }
@@ -109,10 +114,10 @@
     .wrap { padding: 0 16px; }
     nav.main a:not(.pill) { display: none; }
     .hero { height: 560px; border-radius: 24px; }
-    .hero-text { padding: 24px 24px 48px; gap: 14px; }
+    .hero-text { padding: 24px 24px 76px; gap: 14px; }
     h1 { font-size: 40px; }
     .hero p { font-size: 17px; }
-    .hero .credit { left: 24px; right: auto; }
+    .hero .credit { left: 24px; right: 24px; }
     section.block { padding-top: 64px; }
     h2 { font-size: 28px; }
     .promise, .biz-text { padding: 28px; }
@@ -138,12 +143,16 @@
 <main>
   <section class="wrap" aria-label="Intro">
     <div class="hero">
+      <video class="hero-video" id="hero-video" muted loop playsinline preload="auto" poster="video/hero-wide.jpg" aria-hidden="true"></video>
+      <button class="hero-pause" id="hero-pause" type="button" aria-label="Pause the video" hidden>
+        <svg id="hero-pause-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
+      </button>
       <div class="hero-text">
         <span class="badge"><span class="dot"></span>Free for iPhone</span>
         <h1>The best of Noosa, right now.</h1>
         <p>What's on today, what's coming up, and the places locals love, picked for this moment and in one calm app.</p>
       </div>
-      <p class="credit">Main Beach · Photo: Queensland, Australia on Unsplash</p>
+      <p class="credit" id="hero-credit">Noosa River, Noosa Heads, Queensland · Courtesy of Tourism and Events Queensland</p>
     </div>
   </section>
 
@@ -297,6 +306,34 @@
   </div>
 </footer>
 
+<script>
+// Hero video: Noosa from Visual Queensland's show reels, wide on computers, tall on phones.
+// The credit line names each shot's place as it shows. Reduce Motion keeps the still.
+(function () {
+  var video = document.getElementById('hero-video'), credit = document.getElementById('hero-credit');
+  var button = document.getElementById('hero-pause'), icon = document.getElementById('hero-pause-icon');
+  var cues = [{"at": 0, "place": "Noosa River, Noosa Heads"}, {"at": 2.45, "place": "Main Beach, Noosa Heads"}, {"at": 5.75, "place": "Little Cove, Noosa National Park"}, {"at": 8.95, "place": "Coastal Walk, Noosa National Park"}, {"at": 11.15, "place": "Noosa Spit, Noosa Heads"}, {"at": 14.15, "place": "Noosa Everglades, Great Sandy National Park"}, {"at": 17.35, "place": "Noosa Everglades, Great Sandy National Park"}, {"at": 20.65, "place": "Lake Cootharaba"}];
+  var tall = window.matchMedia('(max-width: 700px)').matches;
+  video.poster = tall ? 'video/hero-tall.jpg' : 'video/hero-wide.jpg';
+  if (tall) video.parentNode.style.backgroundImage = 'url(video/hero-tall.jpg)';
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  video.src = tall ? 'video/hero-tall.mp4' : 'video/hero-wide.mp4';
+  var shown = 0;
+  video.addEventListener('timeupdate', function () {
+    var i = 0;
+    while (i + 1 < cues.length && video.currentTime >= cues[i + 1].at) i++;
+    if (i !== shown) { shown = i; credit.textContent = cues[i].place + ', Queensland · Courtesy of Tourism and Events Queensland'; }
+  });
+  var play = video.play();
+  if (play && play.catch) play.catch(function () {});
+  button.hidden = false;
+  button.addEventListener('click', function () {
+    if (video.paused) { video.play(); button.setAttribute('aria-label', 'Pause the video');
+      icon.innerHTML = '<rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect>'; }
+    else { video.pause(); button.setAttribute('aria-label', 'Play the video'); icon.innerHTML = '<path d="M8 5.5v13l11-6.5z"></path>'; }
+  });
+})();
+</script>
 <script>
   const ENDPOINT = 'https://umktkwggbjhwotnvafjo.supabase.co/functions/v1/join-list';
   const form = document.getElementById('notify');
