@@ -490,6 +490,9 @@
     });
   });
   measure();
+  // Fetch every screen once the page has loaded, so none appears half drawn mid-scroll.
+  function preload() { story.querySelectorAll('img.shot').forEach(function (img) { img.loading = 'eager'; }); }
+  if (document.readyState === 'complete') preload(); else window.addEventListener('load', preload);
 })();
 
 // Sign-up: both forms add an email to the list, for one email when the app is out.
