@@ -12,9 +12,24 @@
   h2 { font-weight: 500; font-size: 20px; margin: 36px 0 8px; }
   .date { color: var(--muted); margin: 0 0 24px; }
   a { color: var(--link); }
+  header.top { max-width: 640px; margin: 0 auto; padding: 20px 24px 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+  .brand img { width: 32px; height: 32px; border-radius: 8px; }
+  .brand span { font-size: 22px; font-weight: 600; letter-spacing: -0.03em; }
+  a.home { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 18px; border-radius: 999px; background: var(--ink); color: #fff; font-size: 15px; font-weight: 600; text-decoration: none; }
+  main { padding-top: 32px; }
+  footer.bottom { max-width: 640px; margin: 0 auto; padding: 0 24px 48px; }
+  footer.bottom a { font-weight: 500; }
 </style>
 </head>
 <body>
+<header class="top">
+  <a class="brand" href="../" aria-label="Noosa App home">
+    <img src="../img/icon.png" alt="">
+    <span>noosa</span>
+  </a>
+  <a class="home" href="../"><span aria-hidden="true">&larr;</span> Home</a>
+</header>
 <main>
 <h1>Noosa App terms of use</h1>
 <p class="date">Last updated 3 November 2026</p>
@@ -85,5 +100,8 @@
 <h2>10. Contact</h2>
 <p>Questions, corrections or something we&#x27;ve got wrong: <strong><a href="mailto:noosaapp@icloud.com">noosaapp@icloud.com</a></strong>. If a place has closed, a time has changed or a spot is unsafe, please tell us so we can fix it for everyone.</p>
 </main>
+<footer class="bottom">
+  <p><a href="../">&larr; Back to the home page</a></p>
+</footer>
 </body>
 </html>
