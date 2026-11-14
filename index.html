@@ -463,13 +463,36 @@
     var p = -r.top / Math.max(1, r.height - vh);
     show(Math.max(0, Math.min(n - 1, Math.floor(p * n))));
   }
+  // On a phone one flick could run through several screens (Sam, 14 Nov 2026). While the phone
+  // is pinned, each swipe moves one screen, and past the first or last it carries on down the
+  // page. CSS scroll snapping held Safari on the first screen, so this is done by hand.
+  function chapterAt(i) {
+    var top = story.getBoundingClientRect().top + window.scrollY, span = story.offsetHeight - window.innerHeight;
+    if (i < 0) return top - window.innerHeight * 0.6;
+    if (i >= n) return top + span + window.innerHeight * 0.4;
+    return top + ((i + 0.5) / n) * span;
+  }
+  if (window.matchMedia('(pointer: coarse)').matches) {
+    var startY = null, held = false;
+    story.addEventListener('touchstart', function (e) {
+      var r = story.getBoundingClientRect();
+      held = r.top <= 1 && r.bottom >= window.innerHeight - 1;
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+    story.addEventListener('touchmove', function (e) { if (held) e.preventDefault(); }, { passive: false });
+    story.addEventListener('touchend', function (e) {
+      if (!held || startY === null) return;
+      var dy = startY - e.changedTouches[0].clientY;
+      startY = null;
+      if (Math.abs(dy) < 24) return;
+      window.scrollTo({ top: chapterAt(idx + (dy > 0 ? 1 : -1)), behavior: 'smooth' });
+    });
+  }
   window.addEventListener('scroll', measure, { passive: true });
   window.addEventListener('resize', measure);
   chips.forEach(function (chip) {
     chip.addEventListener('click', function () {
-      var i = Number(chip.getAttribute('data-jump'));
-      var top = story.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: top + ((i + 0.5) / n) * (story.offsetHeight - window.innerHeight), behavior: 'smooth' });
+      window.scrollTo({ top: chapterAt(Number(chip.getAttribute('data-jump'))), behavior: 'smooth' });
     });
   });
   measure();
