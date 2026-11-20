@@ -1,0 +1,28 @@
+# Noosa App
+
+> The Noosa App ("Noosa App: Local Guide" on the App Store) is a free iPhone guide to Noosa, Queensland, Australia, made by locals. It reads the tide, the weather and the time of day, then shows what's good right now.
+
+- Free to download. No account or sign-up. iPhone only for now (no Android).
+- App Store: https://apps.apple.com/app/noosa-app-local-guide/id6828637417
+- Made by co-founders Sam Wilson-Smith and Jasmin Haidenthaler, who live in Noosa. Noosa App is a business name of J Haidenthaler & S.J Wilson-Smith (ABN 42 957 931 637).
+- Contact: noosaapp@gmail.com
+
+## What it does
+
+- Today: live tide, sunset, water temperature and surf for Noosa, with ideas that suit the conditions right now.
+- What's on: live music, markets and trivia this week, and Noosa's big festivals through the year, checked with the venues every week.
+- Explore and Map: about 150 beaches, national park walks, cafes, restaurants, bars, tours and day trips, picked by locals, with what suits this time of day first.
+- Borrow a local's day: ready-made days timed to the tide and the sunset, added to your plan in one tap.
+- Plan: a plan for each day of your trip, with a small map and an optional reminder before each stop. Your plan stays on your phone.
+- Works without signal: it keeps a saved copy of the weather and the places.
+
+## Where it covers
+
+Noosa Heads, Noosaville, Tewantin, Sunshine Beach and Peregian, plus the Noosa hinterland, the Noosa Everglades, the Noosa North Shore and Coolum.
+
+## Pages
+
+- [Home](https://noosaapp.com.au/): what the app does, with screenshots
+- [For businesses](https://noosaapp.com.au/business/): free listings, corrections and photos
+- [Privacy policy](https://noosaapp.com.au/privacy/)
+- [Terms of use](https://noosaapp.com.au/terms/)
